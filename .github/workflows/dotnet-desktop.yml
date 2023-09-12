@@ -7,5 +7,5 @@ jobs:
     name: Unit Testing
     runs-on: windows-latest
     steps:
-      -uses: actions/checkout@2.1.0
-      -run: dotnet test
+      - uses: actions/checkout@2.1.0
+      - run: dotnet test
