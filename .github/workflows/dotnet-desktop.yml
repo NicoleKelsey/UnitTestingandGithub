@@ -1,11 +1,33 @@
-name: Tests
+name: .NET
 
-on: push
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
 
 jobs:
-  test:
-    name: Unit Testing
+  build:
+
     runs-on: windows-latest
+
     steps:
-      - uses: actions/checkout@v2.1.0
-      - run: dotnet test
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 7.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --no-restore
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
+    - name: Publish
+      run: dotnet publish UnitTestingandGithub/UnitTestingandGithub.csproj -c Release  --output Console
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: console
+        path: D:\a\UnitTestingandGithub\UnitTestingandGithub\UnitTestingandGithub\bin\Release\**\**.exe
+        if-no-files-found: error
